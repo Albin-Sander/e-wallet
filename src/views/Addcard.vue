@@ -1,44 +1,58 @@
 <template>
-  <div class="home">
-    <Top wallet="E-Wallet" />
+  <div id="addcard">
+    <Top wallet="ADD A NEW BANK CARD" />
     <card />
-    <cardstack />
+    <cardform />
     <button v-on:click="navigate">ADD A NEW CARD</button>
+    <p>hello {{ cardnumber }}</p>
   </div>
 </template>
 
 <script>
-// @ is an alias to /src
-
 import Top from "../components/Top";
 import Card from "../components/Card";
-import Cardstack from "../components/Cardstack";
+import Cardform from "../components/Cardform";
 export default {
-  name: "Home",
+  name: "Addcard",
   components: {
     Top,
     Card,
-    Cardstack
+    Cardform
   },
   methods: {
     navigate: function() {
-      this.$router.push({ path: "/addcard" });
+      this.$router.push({ path: "/" });
     }
+  },
+  data: function() {
+    return {
+      cardnumber: ""
+    };
   }
 };
 </script>
 
 <style>
-.home {
+#addcard {
   display: grid;
   grid-template-columns: repeat(3, 382px);
-  grid-template-rows: 2rem 241px 241px 7rem 6rem;
+  grid-template-rows: 6rem 241px 12rem 7rem 6rem;
   grid-row-gap: 2rem;
   justify-content: center;
 }
 
+#top {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+}
+
+#card {
+  background-color: #d0d0d0;
+}
+
 button {
-  grid-row: 5;
+  grid-row: 7;
   grid-column: 2;
   width: 382px;
   height: 80px;
