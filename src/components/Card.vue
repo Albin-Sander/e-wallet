@@ -2,9 +2,9 @@
   <div id="card">
     <img id="chip" src="../assets/chip-light.svg" />
     <img id="vendor" src="../assets/vendor-bitcoin.svg" />
-    <p id="cardnumber1">{{value}}</p>
+    <p id="cardnumber1">{{newCardNumber}}</p>
     <p id="chn">CARDHOLDER NAME</p>
-    <p id="name">ALBIN SANDER</p>
+    <p @click="test()" id="name">ALBIN SANDER</p>
     <p id="valid">VALID THRU</p>
     <p id="date">12/22</p>
   </div>
@@ -14,15 +14,14 @@
 export default {
   name: "Card",
   data() {
-    return {
-      value: ""
-    };
+    return {};
   },
   components: {},
-  props: { method: { type: Function } },
+  props: ["handleCardNumber"],
 
+  methods: {},
   mounted() {
-    this.method(this.value);
+    this.handleCardNumber = this.newCardNumber();
   }
 };
 </script>
