@@ -1,14 +1,14 @@
 <template>
   <div id="addcard">
     <Top wallet="ADD A NEW BANK CARD" />
-    <card />
-    <cardform />
-    <button v-on:click="navigate">ADD A NEW CARD</button>
-    <p>hello {{ cardnumber }}</p>
+    <card v-bind="handleCardNumber" />
+    <cardform @cardnumber="handleCardNumber" />
+    <button @click="navigate()">ADD A NEW CARD</button>
   </div>
 </template>
 
 <script>
+//Gör en metod för att att ta emot cardnumber från cardform och skicka sedan som prop till card.
 import Top from "../components/Top";
 import Card from "../components/Card";
 import Cardform from "../components/Cardform";
@@ -19,15 +19,18 @@ export default {
     Card,
     Cardform
   },
+  data() {
+    return {};
+  },
+  props: [],
+
   methods: {
     navigate: function() {
       this.$router.push({ path: "/" });
+    },
+    handleCardNumber: function(value) {
+      console.log(value);
     }
-  },
-  data: function() {
-    return {
-      cardnumber: ""
-    };
   }
 };
 </script>

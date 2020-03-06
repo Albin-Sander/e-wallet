@@ -27,18 +27,24 @@
         <option value="evil">EVIL CORP</option>
       </select>
     </form>
-    <p>Message is {{ cardnumber }}</p>
+    <p>Number is {{ cardnumber }}</p>
   </div>
 </template>
 
 <script>
 export default {
   name: "Cardform",
-  data: function() {
+  data() {
     return {};
   },
-  props: {
-    cardnumber: String
+  props: { cardnumber: String },
+  methods: {},
+
+  watch: {
+    cardnumber: function(value) {
+      console.log(value);
+      this.$emit("cardnumber", this.cardnumber);
+    }
   }
 };
 </script>

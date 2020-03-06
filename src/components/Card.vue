@@ -2,10 +2,7 @@
   <div id="card">
     <img id="chip" src="../assets/chip-light.svg" />
     <img id="vendor" src="../assets/vendor-bitcoin.svg" />
-    <p id="cardnumber1">1234</p>
-    <p id="cardnumber2">5678</p>
-    <p id="cardnumber3">9101</p>
-    <p id="cardnumber4">1123</p>
+    <p id="cardnumber1">{{value}}</p>
     <p id="chn">CARDHOLDER NAME</p>
     <p id="name">ALBIN SANDER</p>
     <p id="valid">VALID THRU</p>
@@ -15,7 +12,18 @@
 
 <script>
 export default {
-  name: "Card"
+  name: "Card",
+  data() {
+    return {
+      value: ""
+    };
+  },
+  components: {},
+  props: { method: { type: Function } },
+
+  mounted() {
+    this.method(this.value);
+  }
 };
 </script>
 
