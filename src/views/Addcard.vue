@@ -1,8 +1,13 @@
 <template>
   <div id="addcard">
     <Top wallet="ADD A NEW BANK CARD" />
-    <card v-bind:handleCardNumber="handleCardNumber" />
-    <cardform @cardnumber="handleCardNumber($event)" />
+    <card :card="cardNumber" :name="cardName" :valid="valid" :selected="selected" />
+    <cardform
+      @cardnumber="handleCardNumber($event)"
+      @cardname="handleCardName($event)"
+      @valid="handleValid($event)"
+      @selected="handleSelected($event)"
+    />
     <button @click="navigate()">ADD A NEW CARD</button>
   </div>
 </template>
@@ -21,7 +26,10 @@ export default {
   },
   data() {
     return {
-      x: ""
+      cardNumber: "",
+      cardName: "",
+      valid: "",
+      selected: ""
     };
   },
   props: [],
@@ -31,9 +39,16 @@ export default {
       this.$router.push({ path: "/" });
     },
     handleCardNumber: function(updatedCard) {
-      console.log(updatedCard);
-      let x = updatedCard;
-      console.log(x);
+      this.cardNumber = updatedCard;
+    },
+    handleCardName: function(updatedName) {
+      this.cardName = updatedName;
+    },
+    handleValid: function(updatedValid) {
+      this.valid = updatedValid;
+    },
+    handleSelected: function(updatedSelected) {
+      this.selected = updatedSelected;
     }
   }
 };

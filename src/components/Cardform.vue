@@ -6,12 +6,12 @@
     </form>
     <form id="formname">
       <label for="cname">CARDHOLDERS NAME:</label>
-      <input type="text" id="cname" name="fname" />
+      <input v-model="cardname" type="text" id="cname" name="fname" />
     </form>
     <div id="smallforms">
       <form id="validform">
         <label for="valid">VALID THRU:</label>
-        <input type="text" id="valid2" name="fname" />
+        <input v-model="valid" type="text" id="valid2" name="fname" />
       </form>
       <form id="ccvform">
         <label for="ccv">CCV:</label>
@@ -20,14 +20,13 @@
     </div>
     <form id="vendorform">
       <label for="vendorvalid">VENDOR:</label>
-      <select id="vendorselect">
+      <select v-model="selected" id="vendorselect">
         <option value="bitcoin">BITCOIN INC</option>
         <option value="ninja">NINJA BANK</option>
         <option value="blockchain">BLOCK CHAIN INC</option>
         <option value="evil">EVIL CORP</option>
       </select>
     </form>
-    <p>Number is {{ cardnumber }}</p>
   </div>
 </template>
 
@@ -35,15 +34,32 @@
 export default {
   name: "Cardform",
   data() {
-    return {};
+    return {
+      cardnumber: "",
+      cardname: "",
+      valid: "",
+      selected: ""
+    };
   },
-  props: { cardnumber: String },
+  props: {},
   methods: {},
 
   watch: {
     cardnumber: function(value) {
       console.log(value);
       this.$emit("cardnumber", this.cardnumber);
+    },
+    cardname: function(value) {
+      console.log(value);
+      this.$emit("cardname", this.cardname);
+    },
+    valid: function(value) {
+      console.log(value);
+      this.$emit("valid", this.valid);
+    },
+    selected: function(value) {
+      console.log(value);
+      this.$emit("selected", this.selected);
     }
   }
 };

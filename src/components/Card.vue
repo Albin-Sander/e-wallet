@@ -2,11 +2,11 @@
   <div id="card">
     <img id="chip" src="../assets/chip-light.svg" />
     <img id="vendor" src="../assets/vendor-bitcoin.svg" />
-    <p id="cardnumber1">{{newCardNumber}}</p>
+    <p id="cardnumber1">{{ card }}</p>
     <p id="chn">CARDHOLDER NAME</p>
-    <p @click="test()" id="name">ALBIN SANDER</p>
-    <p id="valid">VALID THRU</p>
-    <p id="date">12/22</p>
+    <p id="name">{{ name }}</p>
+    <p v-on:click="changeColor" id="valid">VALID THRU</p>
+    <p id="date">{{ valid}}</p>
   </div>
 </template>
 
@@ -17,12 +17,24 @@ export default {
     return {};
   },
   components: {},
-  props: ["handleCardNumber"],
+  props: {
+    handleCardNumber: {
+      type: Function
+    },
+    card: String,
+    name: String,
+    valid: String,
+    selected: String
+  },
 
-  methods: {},
-  mounted() {
-    this.handleCardNumber = this.newCardNumber();
-  }
+  methods: {
+    changeColor: function(selected) {
+      if (selected === "bitcoin") {
+        document.getElementById("card").style.background = "orange";
+      }
+    }
+  },
+  mounted() {}
 };
 </script>
 
