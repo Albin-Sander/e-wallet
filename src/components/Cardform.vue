@@ -21,10 +21,12 @@
     <form id="vendorform">
       <label for="vendorvalid">VENDOR:</label>
       <select v-model="selected" id="vendorselect">
-        <option value="bitcoin">BITCOIN INC</option>
-        <option value="ninja">NINJA BANK</option>
-        <option value="blockchain">BLOCK CHAIN INC</option>
-        <option value="evil">EVIL CORP</option>
+        <option v-on:click="changeColor()" value="bitcoin">BITCOIN INC</option>
+        <option v-on:click="changeColor()" value="ninja">NINJA BANK</option>
+        <option v-on:click="changeColor()" value="blockchain"
+          >BLOCK CHAIN INC</option
+        >
+        <option v-on:click="changeColor()" value="evil">EVIL CORP</option>
       </select>
     </form>
   </div>
@@ -42,7 +44,27 @@ export default {
     };
   },
   props: {},
-  methods: {},
+  methods: {
+    changeColor: function() {
+      if (this.selected === "bitcoin") {
+        document.getElementById("card").style.background = "#FFAE34";
+        document.getElementById("vendor").src =
+          "/img/vendor-bitcoin.6d450848.svg";
+        document.getElementById("chip").src = "/img/chip-light.5bf3177c.svg";
+      } else if (this.selected === "ninja") {
+        document.getElementById("card").style.background = "#222222";
+        document.getElementById("vendor").src =
+          "/img/vendor-ninja.046254ea.svg";
+      } else if (this.selected === "blockchain") {
+        document.getElementById("card").style.background = "#8B58F9";
+        document.getElementById("vendor").src =
+          "/img/vendor-blockchain.a2171465.svg";
+      } else if (this.selected === "evil") {
+        document.getElementById("card").style.background = "#F33355";
+        document.getElementById("vendor").src = "/img/vendor-evil.1c4415c7.svg";
+      }
+    }
+  },
 
   watch: {
     cardnumber: function(value) {

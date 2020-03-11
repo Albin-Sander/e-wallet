@@ -1,12 +1,12 @@
 <template>
   <div id="card">
     <img id="chip" src="../assets/chip-light.svg" />
-    <img id="vendor" src="../assets/vendor-bitcoin.svg" />
+    <img id="vendor" src="" />
     <p id="cardnumber1">{{ card }}</p>
     <p id="chn">CARDHOLDER NAME</p>
     <p id="name">{{ name }}</p>
     <p v-on:click="changeColor" id="valid">VALID THRU</p>
-    <p id="date">{{ valid}}</p>
+    <p id="date">{{ valid }}</p>
   </div>
 </template>
 
@@ -14,7 +14,9 @@
 export default {
   name: "Card",
   data() {
-    return {};
+    return {
+      newBank: ""
+    };
   },
   components: {},
   props: {
@@ -28,13 +30,17 @@ export default {
   },
 
   methods: {
-    changeColor: function(selected) {
-      if (selected === "bitcoin") {
+    changeColor: function() {
+      if (this.newBank === "bitcoin") {
         document.getElementById("card").style.background = "orange";
       }
     }
   },
-  mounted() {}
+  watch: {
+    selected: function(newSelected) {
+      this.newBank = newSelected;
+    }
+  }
 };
 </script>
 
