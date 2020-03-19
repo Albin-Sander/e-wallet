@@ -1,14 +1,22 @@
 <template>
   <div id="addcard">
     <Top wallet="ADD A NEW BANK CARD" />
-    <card :card="cardNumber" :name="cardName" :valid="valid" :selected="selected" />
+
+    <card
+      :card="cardNumber"
+      :name="cardName"
+      :valid="valid"
+      :selected="selected"
+      :fullCard="fullCard"
+    />
+
     <cardform
       @cardnumber="handleCardNumber($event)"
       @cardname="handleCardName($event)"
       @valid="handleValid($event)"
       @selected="handleSelected($event)"
     />
-    <button @click="navigate()">ADD A NEW CARD</button>
+    <button @click="localStorage()">ADD A NEW CARD</button>
   </div>
 </template>
 
@@ -26,29 +34,35 @@ export default {
   },
   data() {
     return {
-      cardNumber: "",
-      cardName: "",
-      valid: "",
-      selected: ""
+      fullCard: {
+        cardNumber: "",
+        cardName: "",
+        valid: "",
+        selected: ""
+      }
     };
   },
   props: [],
 
   methods: {
-    navigate: function() {
-      this.$router.push({ path: "/" });
+    handleFullCard: function(updatedFullCard) {
+      this.fullCard = updatedFullCard;
     },
     handleCardNumber: function(updatedCard) {
-      this.cardNumber = updatedCard;
+      this.fullCard.cardNumber = updatedCard;
     },
     handleCardName: function(updatedName) {
-      this.cardName = updatedName;
+      this.fullCard.cardName = updatedName;
     },
     handleValid: function(updatedValid) {
-      this.valid = updatedValid;
+      this.fullCard.valid = updatedValid;
     },
     handleSelected: function(updatedSelected) {
-      this.selected = updatedSelected;
+      this.fullCard.selected = updatedSelected;
+    },
+    localStorage() {
+      localStorage.setItem("Card", JSON.stringify(this.fullCard));
+      this.$router.push({ path: "/" });
     }
   }
 };

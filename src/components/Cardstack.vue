@@ -1,9 +1,6 @@
 <template>
   <div id="cardstack">
     <card />
-    <card />
-    <card />
-    <card />
   </div>
 </template>
 

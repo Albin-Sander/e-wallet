@@ -1,12 +1,12 @@
 <template>
   <div id="card">
     <img id="chip" src="../assets/chip-light.svg" />
-    <img id="vendor" src="" />
-    <p id="cardnumber1">{{ card }}</p>
+    <img id="vendor" src />
+    <p id="cardnumber1">{{ fullCard.cardNumber}}</p>
     <p id="chn">CARDHOLDER NAME</p>
-    <p id="name">{{ name }}</p>
-    <p v-on:click="changeColor" id="valid">VALID THRU</p>
-    <p id="date">{{ valid }}</p>
+    <p id="name">{{ fullCard.cardName}}</p>
+    <p id="valid">VALID THRU</p>
+    <p id="date">{{ fullCard.valid }}</p>
   </div>
 </template>
 
@@ -23,23 +23,23 @@ export default {
     handleCardNumber: {
       type: Function
     },
-    card: String,
-    name: String,
-    valid: String,
-    selected: String
+    fullCard: {
+      type: Object
+    }
   },
 
   methods: {
-    changeColor: function() {
-      if (this.newBank === "bitcoin") {
-        document.getElementById("card").style.background = "orange";
-      }
+    sendCard: function() {
+      this.$emit("sendCard", this.fullCard);
     }
   },
   watch: {
     selected: function(newSelected) {
       this.newBank = newSelected;
     }
+  },
+  created() {
+    this.fullCard = JSON.parse(localStorage.getItem("Card"));
   }
 };
 </script>

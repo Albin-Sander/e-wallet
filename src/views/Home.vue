@@ -1,25 +1,23 @@
 <template>
   <div class="home">
     <Top wallet="E-Wallet" />
-
     <cardstack />
     <button v-on:click="navigate">ADD A NEW CARD</button>
-    <app-card />
   </div>
 </template>
 
 <script>
 // @ is an alias to /src
-
 import Top from "../components/Top";
-
 import Cardstack from "../components/Cardstack";
 export default {
   name: "Home",
   components: {
     Top,
-
     Cardstack
+  },
+  data() {
+    return {};
   },
   methods: {
     navigate: function() {
