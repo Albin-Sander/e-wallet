@@ -1,178 +1,248 @@
 <template>
-  <div id="cardform">
-    <form id="formnumber">
-      <label for="hname">CARD NUMBER:</label>
-      <input v-model="fullCard.cardnumber" type="text" id="fname" name="fname" />
-    </form>
-    <form id="formname">
-      <label for="cname">CARDHOLDERS NAME:</label>
-      <input v-model="cardname" type="text" id="cname" name="fname" />
-    </form>
-    <div id="smallforms">
-      <form id="validform">
-        <label for="valid">VALID THRU:</label>
-        <input v-model="valid" type="text" id="valid2" name="fname" />
-      </form>
-      <form id="ccvform">
-        <label for="ccv">CCV:</label>
-        <input type="text" id="ccv" name="fname" />
-      </form>
-    </div>
-    <form id="vendorform">
-      <label for="vendorvalid">VENDOR:</label>
-      <select v-model="selected" id="vendorselect">
-        <option v-on:click="changeColor()" value="bitcoin">BITCOIN INC</option>
-        <option v-on:click="changeColor()" value="ninja">NINJA BANK</option>
-        <option v-on:click="changeColor()" value="blockchain">BLOCK CHAIN INC</option>
-        <option v-on:click="changeColor()" value="evil">EVIL CORP</option>
-      </select>
-    </form>
+  <div class="wrapper">
+    <section @input="cardInfo">
+      <label for="cardinputNumber" class="labelInput">
+        CARD NUMBER
+        <span v-if="cardInput.validNumber" class="error">16 Numbers</span>
+      </label>
+      <input
+        v-model="input.inputNumber"
+        @input="validateNumber"
+        type="text"
+        id="cardinputNumber"
+        maxlength="16"
+      />
+      <label for="CardinputName" class="labelInput">CARDHOLDER NAME</label>
+      <input
+        v-model="input.inputName"
+        @input="validateName"
+        type="text"
+        id="CardinputName"
+        maxlength="22"
+      />
+      <section class="sides">
+        <div class="leftSide">
+          <label for="inputValid" class="smallLabel">VALID THRU</label>
+
+          <input
+            v-model="input.inputValid"
+            @input="validateValid"
+            type="text"
+            id="inputValid"
+            maxlength="5"
+          />
+        </div>
+        <div class="rightSide">
+          <label for="cvcInput" class="smallLabel">CVC</label>
+
+          <input
+            v-model="input.cvcInput"
+            @input="validateCvc"
+            type="text"
+            id="cvcInput"
+            maxlength="3"
+          />
+          <label for="vendor" class="labelInput">VENDOR</label>
+          <select name id="vendor" v-model="input.inputVendor" @input="validateVendor">
+            <option value="bitcoin">BITCOIN INC</option>
+            <option value="ninja">NINJA BANK</option>
+            <option value="blockchain">BLOCK CHAIN INC</option>
+            <option value="evil">EVIL CORP</option>
+          </select>
+        </div>
+      </section>
+    </section>
   </div>
 </template>
 
 <script>
 export default {
-  name: "Cardform",
-  data() {
+  data: () => {
     return {
-      fullCard: {
-        cardnumber: "",
-        cardname: "",
-        valid: "",
-        selected: ""
+      input: {
+        inputNumber: "",
+        inputName: "",
+        inputValid: "",
+        cvcInput: "",
+        inputVendor: "",
+        isValid: false
+      },
+      cardInput: {
+        validNumber: false,
+        validName: false,
+        validValid: false,
+        validCvc: false,
+        validVendor: true
       }
     };
   },
-  props: {},
   methods: {
-    changeColor: function() {
-      if (this.selected === "bitcoin") {
-        document.getElementById("card").style.background = "#FFAE34";
-        document.getElementById("vendor").src =
-          "/img/vendor-bitcoin.6d450848.svg";
-        document.getElementById("chip").src = "/img/chip-light.5bf3177c.svg";
-        localStorage.setItem("Card", JSON.stringify(this.fullCard));
-      } else if (this.selected === "ninja") {
-        document.getElementById("card").style.background = "#222222";
-        document.getElementById("vendor").src =
-          "/img/vendor-ninja.046254ea.svg";
-      } else if (this.selected === "blockchain") {
-        document.getElementById("card").style.background = "#8B58F9";
-        document.getElementById("vendor").src =
-          "/img/vendor-blockchain.a2171465.svg";
-      } else if (this.selected === "evil") {
-        document.getElementById("card").style.background = "#F33355";
-        document.getElementById("vendor").src = "/img/vendor-evil.1c4415c7.svg";
+    cardInfo() {
+      let isTrue = Object.keys(this.cardInput).every(
+        k => this.cardInput[k] == false
+      );
+      if (isTrue == true) {
+        let isEmpty = Object.keys(this.input).some(k => this.input[k] === "");
+        if (isEmpty == false) {
+          this.input.isValid = true;
+        }
       }
-      if (this.cardnumber.length < 16) {
-        alert("Card number must contain 16 numbers!");
-      } else if (this.cardnumber.length > 16) {
-        alert("Card number must contain exactly 16 numbers!");
+      this.$emit("cardInfo", this.input);
+    },
+    validateNumber() {
+      if (
+        this.checkNumber(this.input.inputNumber) == true ||
+        this.input.inputNumber === ""
+      ) {
+        this.cardInput.validNumber = false;
+      } else {
+        this.cardInput.validNumber = true;
       }
-    }
-  },
-
-  watch: {
-    cardnumber: function(value) {
-      console.log(value);
-      this.$emit("cardnumber", this.cardnumber);
     },
-    cardname: function(value) {
-      console.log(value);
-      this.$emit("cardname", this.cardname);
+    validateName() {
+      if (this.checkName(this.input.inputName) == true) {
+        this.cardInput.validName = false;
+      } else {
+        this.cardInput.validName = true;
+      }
     },
-    valid: function(value) {
-      console.log(value);
-      this.$emit("valid", this.valid);
+    validateValid() {
+      if (this.checkValid(this.input.inputValid) == true) {
+        this.cardInput.validValid = false;
+      } else {
+        this.cardInput.validValid = true;
+      }
     },
-    selected: function(value) {
-      console.log(value);
-      this.$emit("selected", this.selected);
+    validateCvc() {
+      if (this.checkCvc(this.input.cvcInput) == true) {
+        this.cardInput.validCvc = false;
+      } else {
+        this.cardInput.validCvc = true;
+      }
+    },
+    validateVendor() {
+      this.cardInput.validVendor = true;
+    },
+    checkNumber(inputNumber) {
+      const pattern = /^[0-9]{16}/;
+      return pattern.test(inputNumber);
+    },
+    checkName(inputName) {
+      const pattern = /^[a-zA-Z]+ [a-zA-Z]+$/;
+      return pattern.test(inputName);
+    },
+    checkValid(inputValid) {
+      const pattern = /^(0[1-9]|1[012])\/\d{2}$/;
+      return pattern.test(inputValid);
+    },
+    checkCvc(cvcInput) {
+      const pattern = /^[0-9]{3}/;
+      return pattern.test(cvcInput);
     }
   }
 };
 </script>
 
-<style>
-#cardform {
+<style lang="scss" scoped>
+.wrapper {
   display: grid;
-  grid-row: 3/7;
-  grid-column: 2;
-  align-content: space-evenly;
 }
 
-#formnumber {
-  width: 382px;
-  height: 56px;
-  margin-top: 30px;
-}
-
-#fname {
-  width: 100%;
-  height: 100%;
-  border: 1px solid rgba(0, 0, 0, 0.8);
-  box-sizing: border-box;
-  border-radius: 8px;
-}
-
-#formname {
-  width: 382px;
-  height: 56px;
-  margin-top: 30px;
-}
-
-#cname {
-  width: 100%;
-  height: 100%;
-  border: 1px solid rgba(0, 0, 0, 0.8);
-  box-sizing: border-box;
-  border-radius: 8px;
-}
-
-#smallforms {
+.labelInput {
   display: flex;
+  width: 24rem;
+  font-size: 0.75rem;
+}
+#cardinputNumber,
+#CardinputName {
+  display: flex;
+  border-radius: 0.5rem;
+  margin: 0 0 1rem;
+  width: 24rem;
+  height: 3.5rem;
+  border: 1px solid black;
+  font-size: 1rem;
+}
+
+#vendor {
+  display: flex;
+  border-radius: 0.5rem;
+  margin: 0 0 1rem 0;
+  width: 24rem;
+  height: 3.5rem;
+  border: 1px solid black;
+  font-size: 1rem;
+}
+#inputValid,
+#cvcInput {
+  height: 3.5rem;
+  border-radius: 0.5rem;
+  border: 1px solid black;
+  font-size: 1rem;
+}
+.smallLabel {
+  width: 10rem;
+  text-align: left;
+  font-size: 0.75rem;
+}
+.sides {
+  display: grid;
   justify-content: space-between;
+  grid-template-columns: 10rem 10rem;
+  margin: 0 0 1rem;
+}
+.leftSide,
+.rightSide {
+  display: flex;
+  flex-direction: column;
+}
+.addBtn {
+  color: #ffffff;
+  background-color: black;
 }
 
-#validform {
-  width: 175px;
-  height: 56px;
-  margin-top: 30px;
-}
+.form {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  margin: 1rem 0rem 0rem 0rem;
+  width: 92%;
+  min-height: 20rem;
 
-#valid2 {
-  width: 100%;
-  height: 100%;
-  border: 1px solid rgba(0, 0, 0, 0.8);
-  box-sizing: border-box;
-  border-radius: 8px;
-}
+  input,
+  select {
+    width: 100%;
+    border-radius: 7px;
+    border: 1px solid black;
+  }
+  select {
+    margin: 1rem 0rem;
+  }
+  label {
+    color: black;
+    margin: 1rem 0rem 0.3rem 0rem;
+    font-size: 0.7rem;
+  }
+  .validInfo {
+    display: grid;
+    grid-template-columns: auto auto;
+    article {
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      align-items: flex-start;
+      width: 90%;
 
-#ccvform {
-  width: 175px;
-  height: 56px;
-  margin-top: 30px;
-}
-
-#ccv {
-  width: 100%;
-  height: 100%;
-  border: 1px solid rgba(0, 0, 0, 0.8);
-  box-sizing: border-box;
-  border-radius: 8px;
-}
-
-#vendorform {
-  width: 382px;
-  height: 56px;
-  margin-top: 30px;
-}
-
-#vendorselect {
-  height: 100%;
-  width: 100%;
-  border: 1px solid rgba(0, 0, 0, 0.8);
-  box-sizing: border-box;
-  border-radius: 8px;
+      &:nth-child(2) {
+        justify-self: flex-end;
+      }
+    }
+  }
+  button {
+    background: black;
+    color: #ffffff;
+    margin-top: 0rem;
+  }
 }
 </style>

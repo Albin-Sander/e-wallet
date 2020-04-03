@@ -1,49 +1,77 @@
 <template>
   <div class="home">
-    <Top wallet="E-Wallet" />
-    <cardstack />
-    <button v-on:click="navigate">ADD A NEW CARD</button>
+    <Top current="ACTIVE CARD" />
+    <Card :input="input" />
+    <CardStack :cards="myCards" @changeCard="changeCard" />
+    <button class="Btn" @click="removeCard">REMOVE CARD</button>
+    <button class="Btn" @click="addCard">ADD A NEW CARD</button>
   </div>
 </template>
 
 <script>
-// @ is an alias to /src
 import Top from "../components/Top";
-import Cardstack from "../components/Cardstack";
+import Card from "../components/Card";
+import CardStack from "../components/Cardstack";
 export default {
   name: "Home",
   components: {
     Top,
-    Cardstack
+    Card,
+    CardStack
   },
-  data() {
-    return {};
+  data: () => {
+    return {
+      input: {},
+      cards: localStorage.getItem("cards"),
+      myCards: []
+    };
+  },
+  mounted() {
+    if (localStorage.getItem("cards")) {
+      this.myCards = JSON.parse(localStorage.getItem("cards"));
+    } else {
+      localStorage.setItem("cards", JSON.stringify(this.myCards));
+    }
+    if (localStorage.getItem("activeCard")) {
+      this.input = JSON.parse(localStorage.getItem("activeCard"));
+    }
   },
   methods: {
-    navigate: function() {
-      this.$router.push({ path: "/addcard" });
+    addCard() {
+      this.$router.push("/AddCard");
+    },
+    changeCard(index) {
+      this.input = this.myCards[index];
+      localStorage.setItem("activeCard", JSON.stringify(this.input));
+    },
+    removeCard() {
+      let index = this.myCards.findIndex(x => x.nrInput == this.input.nrInput);
+      this.myCards.splice(index, 1);
+      localStorage.setItem("cards", JSON.stringify(this.myCards));
+      this.input = {};
+      localStorage.setItem("activeCard", JSON.stringify(this.input));
+    }
+  },
+  watch: {
+    cards() {
+      this.myCards = JSON.parse(localStorage.getItem("cards"));
     }
   }
 };
 </script>
-
 <style>
-.home {
-  display: grid;
-  grid-template-columns: repeat(3, 382px);
-  grid-template-rows: 2rem 241px 241px 7rem 6rem;
-  grid-row-gap: 2rem;
-  justify-content: center;
-}
-
-button {
-  grid-row: 5;
-  grid-column: 2;
-  width: 382px;
-  height: 80px;
+.Btn {
+  width: 24rem;
+  height: 5rem;
   border: 1px solid #000000;
-  box-sizing: border-box;
-  border-radius: 8px;
-  font-size: 22px;
+  background: white;
+  border-radius: 0.5rem;
+  font-size: 1.4rem;
+  font-weight: 900;
+  position: absolute;
+  bottom: 3rem;
+}
+.remove {
+  bottom: 8.5rem;
 }
 </style>

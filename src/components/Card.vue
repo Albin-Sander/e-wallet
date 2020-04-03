@@ -1,50 +1,148 @@
 <template>
-  <div id="card">
-    <img id="chip" src="../assets/chip-light.svg" />
-    <img id="vendor" src />
-    <p id="cardnumber1">{{ fullCard.cardNumber}}</p>
-    <p id="chn">CARDHOLDER NAME</p>
-    <p id="name">{{ fullCard.cardName}}</p>
-    <p id="valid">VALID THRU</p>
-    <p id="date">{{ fullCard.valid }}</p>
-  </div>
+  <section>
+    <article :class="['cards', vendor]">
+      <div id="chipVendor">
+        <img :src="require(`../assets/chip-${chip}.svg`)" />
+        <img class="img" v-bind:src="require(`../assets/vendor-${vendor}.svg`)" />
+      </div>
+      <p id="inputName1">{{inputNumber}}</p>
+      <section class="nameandinfo">
+        <div class="name">
+          <p class="cardInfo">Cardholder name</p>
+          <p id="name">{{inputName}}</p>
+        </div>
+        <div class="valid">
+          <p class="cardInfo">valid thru</p>
+          <p id="validThru">{{inputValid}}</p>
+        </div>
+      </section>
+    </article>
+  </section>
 </template>
 
 <script>
 export default {
   name: "Card",
-  data() {
-    return {
-      newBank: ""
-    };
+  props: { input: Object },
+  data: () => {
+    return { defaultImg: "brackets", defaultChip: "light" };
   },
-  components: {},
-  props: {
-    handleCardNumber: {
-      type: Function
+  computed: {
+    inputNumber() {
+      if (!this.input.inputNumber) {
+        let unSet = "";
+        return unSet;
+      } else {
+        let inputNumber = this.input.inputNumber;
+        inputNumber = inputNumber.match(/.{1,4}/g);
+        return inputNumber.join(" ");
+      }
     },
-    fullCard: {
-      type: Object
+    inputName() {
+      if (!this.input.inputName) {
+        let unSet = "";
+        return unSet;
+      } else {
+        return this.input.inputName;
+      }
+    },
+    inputValid() {
+      if (!this.input.inputValid) {
+        let unSet = "";
+        return unSet;
+      } else {
+        return this.input.inputValid;
+      }
+    },
+    vendor() {
+      if (!this.input.inputVendor) {
+        return this.defaultImg;
+      } else {
+        let vendor = this.input.inputVendor;
+        return vendor;
+      }
+    },
+    chip() {
+      if (
+        this.input.inputVendor == "ninja" ||
+        this.input.inputVendor == "evil" ||
+        this.input.inputVendor == "blockchain"
+      ) {
+        return this.defaultChip;
+      } else {
+        return "dark";
+      }
     }
-  },
-
-  methods: {
-    sendCard: function() {
-      this.$emit("sendCard", this.fullCard);
-    }
-  },
-  watch: {
-    selected: function(newSelected) {
-      this.newBank = newSelected;
-    }
-  },
-  created() {
-    this.fullCard = JSON.parse(localStorage.getItem("Card"));
   }
 };
 </script>
+<style scoped lang="scss">
+.cards {
+  margin: 1rem;
+  width: 25rem;
+  height: 15rem;
+  border-radius: 0.5rem;
+}
+.bitcoin {
+  background: #ffae34;
+  color: black;
+}
+.ninja {
+  background: #222222;
+  color: white;
+}
+.blockchain {
+  background: #8b58f9;
+  color: white;
+}
+.evil {
+  background: #f33355;
+  color: white;
+}
 
-<style>
+#chipVendor {
+  display: flex;
+  justify-content: space-between;
+  font-size: 2.5rem;
+  margin-bottom: 0.5rem;
+}
+.img {
+  max-height: 2.5rem;
+  max-width: 2.5rem;
+}
+.numbers {
+  line-height: 2rem;
+  font-size: 1.7rem;
+  margin: 1rem;
+}
+.nameandinfo {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  height: 3.5rem;
+}
+.name {
+  text-align: left;
+}
+.valid {
+  text-align: right;
+  width: 5rem;
+}
+.cardInfo {
+  font-size: 0.75rem;
+}
+#inputName {
+  font-size: 1.125rem;
+  width: 15rem;
+}
+#validThru {
+  font-size: 1.12rem;
+  background: none;
+  border: none;
+  outline: none;
+}
+
+//mycard
 #card {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -75,26 +173,43 @@ export default {
   margin-right: 1rem;
 }
 
-#cardnumber1 {
+#inputName1 {
   grid-row: 2;
   grid-column: 1;
   font-size: 2rem;
   margin-left: 0.5rem;
 }
 
-#cardnumber2 {
+bitcoin {
+  background: #ffae34;
+  color: black;
+}
+.ninja {
+  background: #222222;
+  color: white;
+}
+.blockchain {
+  background: #8b58f9;
+  color: white;
+}
+.evil {
+  background: #f33355;
+  color: white;
+}
+
+#inputName2 {
   grid-row: 2;
   grid-column: 2;
   font-size: 2rem;
 }
 
-#cardnumber3 {
+#inputName3 {
   grid-row: 2;
   grid-column: 3;
   font-size: 2rem;
 }
 
-#cardnumber4 {
+#inputName4 {
   grid-row: 2;
   grid-column: 4;
   font-size: 2rem;
@@ -115,7 +230,7 @@ export default {
   margin-left: 0.5rem;
 }
 
-#valid {
+#inputValid {
   grid-row: 3;
   grid-column: 4;
   font-size: 0.5rem;
