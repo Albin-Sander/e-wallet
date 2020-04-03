@@ -1,19 +1,26 @@
 <template>
   <div class="wrapper">
     <section @input="cardInfo">
-      <label for="cardinputNumber" class="labelInput">
-        CARD NUMBER
-        <span v-if="cardInput.validNumber" class="error">16 Numbers</span>
-      </label>
+      <label
+        for="cardinputNumber"
+        v-if="cardInput.validVendor === false"
+        class="labelInput"
+      >CARD NUMBER</label>
       <input
+        v-if="cardInput.validVendor === false"
         v-model="input.inputNumber"
         @input="validateNumber"
         type="text"
         id="cardinputNumber"
         maxlength="16"
       />
-      <label for="CardinputName" class="labelInput">CARDHOLDER NAME</label>
+      <label
+        for="CardinputName"
+        v-if="cardInput.validVendor === false"
+        class="labelInput"
+      >CARDHOLDER NAME</label>
       <input
+        v-if="cardInput.validVendor === false"
         v-model="input.inputName"
         @input="validateName"
         type="text"
@@ -22,9 +29,14 @@
       />
       <section class="sides">
         <div class="leftSide">
-          <label for="inputValid" class="smallLabel">VALID THRU</label>
+          <label
+            for="inputValid"
+            v-if="cardInput.validVendor === false"
+            class="smallLabel"
+          >VALID THRU</label>
 
           <input
+            v-if="cardInput.validVendor === false"
             v-model="input.inputValid"
             @input="validateValid"
             type="text"
@@ -33,9 +45,10 @@
           />
         </div>
         <div class="rightSide">
-          <label for="cvcInput" class="smallLabel">CVC</label>
+          <label for="cvcInput" v-if="cardInput.validVendor === false" class="smallLabel">CVC</label>
 
           <input
+            v-if="cardInput.validVendor === false"
             v-model="input.cvcInput"
             @input="validateCvc"
             type="text"
@@ -121,7 +134,7 @@ export default {
       }
     },
     validateVendor() {
-      this.cardInput.validVendor = true;
+      this.cardInput.validVendor = false;
     },
     checkNumber(inputNumber) {
       const pattern = /^[0-9]{16}/;
